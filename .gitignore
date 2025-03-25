@@ -1,0 +1,16 @@
+# Binaries
+*.exe
+*.out
+*.dll
+*.so
+
+# Go vendor
+/vendor/
+
+# Env files
+.env
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
