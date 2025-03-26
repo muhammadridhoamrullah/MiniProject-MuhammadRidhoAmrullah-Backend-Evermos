@@ -14,6 +14,11 @@ type User struct {
 	Email string `json:"email" gorm:"unique"`
 	IDProvinsi string `json:"id_provinsi"`
 	IDKota string `json:"id_kota"`
-	IsAdmin bool `json:"isAdmin"`
+	IsAdmin bool `json:"is_admin"`
+	Toko Toko `json:"toko,omitempty" gorm:"foreignKey:IDUser;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+}
 
+type LoginUser struct {
+	Email string `json:"email"`
+	KataSandi string `json:"kata_sandi"`
 }

@@ -4,7 +4,6 @@ package main
 
 import (
 	"mini-project-BE-Evermos/database"
-	"mini-project-BE-Evermos/models"
 	"mini-project-BE-Evermos/routes"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,14 +17,11 @@ func main() {
 	// Menghubungkan ke database
 	database.ConnectDB()
 
-	// Membuat tabel user jika belum ada
-	database.DB.AutoMigrate(&models.User{})
+	// Memanggil Run Migration yang berfungsi untuk jika tabel belum di database ada maka akan membuat tabel
+	database.RunMigration()
 
 	// Menjalankan fungsi SetupRoutes
 	routes.SetupRoutes(app)
-
-
-
 
 	// Menjalankan aplikasi pada port 3000
 	app.Listen(":3000")
