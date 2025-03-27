@@ -22,3 +22,14 @@ type Alamat struct {
 
 	User *User `gorm:"foreignKey:IDUser" json:"user,omitempty"`
 }
+
+type InputUpdateAlamat struct {
+	JudulAlamat  string `json:"judul_alamat"`
+	NamaPenerima string `json:"nama_penerima"`
+	NoTelp       string `json:"no_telp"`
+	DetailAlamat string `json:"detail_alamat"`
+	IDProvinsi   string `json:"id_provinsi"`
+	IDKota       string `json:"id_kota"`
+	IDKecamatan  string `json:"id_kecamatan"`
+	IDKelurahan  string `json:"id_kelurahan"`
+}

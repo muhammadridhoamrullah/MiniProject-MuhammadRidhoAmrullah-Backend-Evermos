@@ -161,3 +161,43 @@ func UpdateToko(c *fiber.Ctx) error {
 	})
 
 }
+
+func DeleteToko(c *fiber.Ctx) error {
+	userID := c.Locals("user_id").(uint)
+
+	// Cari toko berdasarkan userID
+	var toko models.Toko
+	if err := database.DB.Where("id_user", userID).First(&toko).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  false,
+			"message": "Toko not found",
+			"errors":  []string{"Toko not found"},
+			"data":    nil,
+		})
+	}
+
+	// Cek apakah user yang login sama dengan user yang memiliki toko
+	if userID != toko.IDUser {
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+			"status":  false,
+			"message": "You have no access to delete other user's toko",
+			"errors":  []string{"You have no access to delete other user's toko"},
+			"data":    nil,
+		})
+	}
+
+	// Hapus toko dari database
+	if err := database.DB.Unscoped().Delete(&toko).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to delete toko",
+			"errors":  []string{err.Error()},
+			"data":    nil,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"message": "Success delete toko",
+	})
+}

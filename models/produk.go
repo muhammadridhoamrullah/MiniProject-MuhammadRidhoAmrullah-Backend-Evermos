@@ -17,3 +17,11 @@ type Produk struct {
 	Toko     Toko     `gorm:"foreignKey:IDToko" json:"toko,omitempty"`
 	Kategori Kategori `gorm:"foreignKey:IDKategori" json:"kategori,omitempty"`
 }
+
+type InputUpdateProduk struct {
+	NamaProduk    string `json:"nama_produk"`
+	HargaReseller string `json:"harga_reseller"`
+	HargaKonsumen string `json:"harga_konsumen"`
+	Stok          int    `json:"stok"`
+	Deskripsi     string `json:"deskripsi"`
+}

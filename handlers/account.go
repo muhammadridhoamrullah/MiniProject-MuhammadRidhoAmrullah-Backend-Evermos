@@ -138,3 +138,48 @@ func UpdateProfile(c *fiber.Ctx) error {
 		"errors":  nil,
 	})
 }
+
+func DeleteAccount(c *fiber.Ctx) error {
+	// Ambil user_id dari context
+
+	userID := c.Locals("user_id").(uint)
+
+	// Cari user berdasarkan userID
+	var user models.User
+	if err := database.DB.First(&user, userID).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  false,
+			"message": "User not found",
+			"errors":  []string{"User not found"},
+			"data":    nil,
+		})
+	}
+
+	// Cek apakah user yang login sama dengan user yang akan dihapus
+	if userID != user.ID && !user.IsAdmin {
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+			"status":  false,
+			"message": "You have no access to delete other user's account",
+			"errors":  []string{"You have no access to delete other user's account"},
+			"data":    nil,
+		})
+	}
+
+	// Hapus user
+	if err := database.DB.Unscoped().Delete(&user).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": "Failed to delete account",
+			"errors":  []string{err.Error()},
+			"data":    nil,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"message": "Success delete account",
+		"errors":  nil,
+		"data":    nil,
+	})
+
+}
