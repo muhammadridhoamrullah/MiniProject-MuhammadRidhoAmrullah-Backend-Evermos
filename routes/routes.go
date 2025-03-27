@@ -29,17 +29,46 @@ func SetupRoutes(app *fiber.App) {
 	toko.Put("/", handlers.UpdateToko)
 	// toko.Delete("/", handlers.DeleteToko)
 
-	// alamat := app.Group("/alamat", middleware.Authentication)
-	// alamat.Get("/", handlers.GetAllAlamat)        // Get semua alamat user
-	// alamat.Get("/:id", handlers.GetAlamatByID)    // Get alamat berdasarkan ID
-	// alamat.Post("/", handlers.CreateAlamat)       // Tambah alamat baru
+	alamat := app.Group("/alamat", middleware.Authentication)
+	alamat.Get("/", handlers.GetAllAlamatUser) // Get semua alamat user
+	alamat.Post("/", handlers.CreateAlamat)    // Tambah alamat baru
 	// alamat.Put("/:id", handlers.UpdateAlamat)     // Update alamat
 	// alamat.Delete("/:id", handlers.DeleteAlamat)  // Hapus alamat
 	// alamat.Put("/set-utama/:id", handlers.SetUtamaAlamat) // Set alamat utama
-	
+
 	// // Group untuk wilayah
-	// wilayah := app.Group("/wilayah")
-	// wilayah.Get("/provinces", handlers.GetProvinces)        // Mendapatkan daftar provinsi
-	// wilayah.Get("/cities/:provinceID", handlers.GetCitiesByProvince)  // Mendapatkan daftar kota berdasarkan provinsi
+	wilayah := app.Group("/wilayah")
+	wilayah.Get("/provinsi", handlers.GetProvinces)                // Mendapatkan daftar provinsi
+	wilayah.Get("/kota/:provinsiID", handlers.GetKotaByProvinsiId) // Mendapatkan daftar kota berdasarkan provinsi\
+	wilayah.Get("/kecamatan/:kotaID", handlers.GetKecamatanByKotaID)
+	wilayah.Get("/kelurahan/:kecamatanID", handlers.GetKelurahanByKecamatanID)
+
+	kategori := app.Group("/kategori", middleware.Authentication, middleware.IsAdmin)
+	kategori.Post("/", handlers.CreateKategori)
+	kategori.Get("/", handlers.GetAllKategori)
+	// kategori.Get("/:id", handlers.GetKategoriById)
+	// kategori.Put("/:id", handlers.UpdateKategori)
+	// kategori.Delete("/:id", handlers.DeleteKategori)
+
+	produk := app.Group("/produk", middleware.Authentication)
+	produk.Post("/", handlers.CreateProduk)
+	produk.Get("/", handlers.GetAllProduk)
+	// produk.Get("/:id", handlers.GetProdukById)
+	// produk.Put("/:id", handlers.UpdateProduk)
+	// produk.Delete("/:id", handlers.DeleteProduk)
+	// produk.Get("/search", handlers.SearchProduk)
+	// produk.Get("/filter", handlers.FilterProduk)
+	// produk.Get("/kategori/:id", handlers.GetProdukByKategori)
+	// produk.Get("/toko/:id", handlers.GetProdukByToko)
+
+	transaksi := app.Group("/transaksi", middleware.Authentication)
+	transaksi.Post("/", handlers.CreateTransaksi)
+	transaksi.Get("/", handlers.GetAllTransaksiByUser)
+	// transaksi.Get("/:id", handlers.GetTransaksiById)
+	// transaksi.Put("/:id", handlers.UpdateTransaksi)
+	// transaksi.Delete("/:id", handlers.DeleteTransaksi)
+	// transaksi.Get("/toko/:id", handlers.GetTransaksiByToko)
+	// transaksi.Get("/user/:id", handlers.GetTransaksiByUser)
+	// transaksi.Get("/status/:status", handlers.GetTransaksiByStatus)
 
 }
